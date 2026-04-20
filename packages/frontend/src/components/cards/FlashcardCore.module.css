@@ -1,0 +1,7 @@
+.flashcard {
+  display: inline-block;
+  border-radius: 5rem;
+  box-shadow: black 0 0 0.5rem;
+  padding: 4rem;
+  background: white;
+}

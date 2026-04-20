@@ -1,0 +1,16 @@
+#root {
+  background: #f8fafc;
+  font-family: "Ubuntu", "Roboto", sans-serif;
+
+  --primary-color: #2f4b26;
+  --background-color: #c5dabf93;
+  --secondary-color: #3e885b;
+  --muted-color: #85bda6;
+  --accent-color: #bedcfe;
+
+  color: var(--primary-color);
+}
+
+body {
+  margin: 0;
+}
