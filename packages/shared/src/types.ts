@@ -21,6 +21,7 @@ export type Flashcard = ImageFlashcard | TextFlashcard;
 export type SingleQuestion = {
   type: "single";
   question: string;
+  details: string;
   flashcard: Flashcard;
   answer: string;
   answerType: CountryAnswerType;
@@ -29,6 +30,7 @@ export type SingleQuestion = {
 export type ComparisonQuestion = {
   type: "comparison";
   question: string;
+  details: string;
   options: readonly [Flashcard, Flashcard];
   answerId: number;
 };

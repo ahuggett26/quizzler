@@ -4,11 +4,13 @@ import SingleQuestion from "../components/questions/SingleQuestion";
 import { checkAnswer } from "@quizzler/shared/src/answerChecker";
 import styles from "./Quiz.module.css";
 import ComparisonQuestion from "../components/questions/ComparisonQuestion";
+import AnswerDisplay from "../components/questions/AnswerDisplay";
 
 export default function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionCount, setQuestionCount] = useState(1);
   const [score, setScore] = useState(0);
+  const [questionResult, setQuestionResult] = useState<boolean | null>(null);
   const currentQuestion = questions[questionCount - 1];
 
   useEffect(() => {
@@ -18,6 +20,7 @@ export default function Quiz() {
   }, []);
 
   function nextQuestion() {
+    setQuestionResult(null);
     if (questionCount < questions.length) {
       setQuestionCount((c) => c + 1);
     }
@@ -34,13 +37,15 @@ export default function Quiz() {
         <SingleQuestion
           {...currentQuestion}
           onSubmit={(answer) => {
-            if (checkAnswer(answer, currentQuestion.answer, currentQuestion.answerType)) {
+            const isCorrect = checkAnswer(
+              answer,
+              currentQuestion.answer,
+              currentQuestion.answerType,
+            );
+            if (isCorrect) {
               setScore((s) => s + 1);
-              alert("Correct!");
-            } else {
-              alert("Wrong! The correct answer is: " + currentQuestion.answer);
             }
-            nextQuestion();
+            setQuestionResult(isCorrect);
           }}
         />
       )}
@@ -48,14 +53,19 @@ export default function Quiz() {
         <ComparisonQuestion
           {...currentQuestion}
           onSubmit={(answer) => {
-            if (answer === currentQuestion.answerId) {
+            const isCorrect = answer === currentQuestion.answerId;
+            if (isCorrect) {
               setScore((s) => s + 1);
-              alert("Correct!");
-            } else {
-              alert("Wrong!");
             }
-            nextQuestion();
+            setQuestionResult(isCorrect);
           }}
+        />
+      )}
+      {questionResult !== null && (
+        <AnswerDisplay
+          isCorrect={questionResult}
+          details={currentQuestion.details}
+          onNext={nextQuestion}
         />
       )}
     </div>

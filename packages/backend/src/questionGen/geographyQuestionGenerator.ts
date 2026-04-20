@@ -59,6 +59,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     return {
       type: "single",
       question: "What country does this flag belong to?",
+      details: `This is the flag of ${country.name}.`,
       flashcard: {
         type: "image",
         id: country.id,
@@ -73,6 +74,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     return {
       type: "single",
       question: "What country has this capital city?",
+      details: `This is the capital city of ${country.name}.`,
       flashcard: {
         type: "text",
         id: country.id,
@@ -87,6 +89,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     return {
       type: "single",
       question: "What is the capital city of this country?",
+      details: `The capital city of ${country.name} is ${country.capital}.`,
       flashcard: {
         type: "image",
         id: country.id,
@@ -109,12 +112,15 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     if (!country2) {
       throw new Error("No comparison country available");
     }
-    const answerId =
-      country1.population > country2.population ? country1.id : country2.id;
+    const answer =
+      country1.population > country2.population ? country1 : country2;
+    const incorrectAns =
+      country1.population <= country2.population ? country1 : country2;
 
     return {
       type: "comparison",
       question: "Which country has a larger population?",
+      details: `${answer.name} has a population of ${answer.population}, whereas ${incorrectAns.name} has a population of ${incorrectAns.population}.`,
       options: [
         {
           type: "image",
@@ -129,7 +135,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
           text: country2.name,
         },
       ],
-      answerId,
+      answerId: answer.id,
     };
   }
 
@@ -144,12 +150,15 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     if (!country2) {
       throw new Error("No comparison country available");
     }
-    const answerId =
-      country1.areaKm2 > country2.areaKm2 ? country1.id : country2.id;
+    const answer =
+      country1.areaKm2 > country2.areaKm2 ? country1 : country2;
+    const incorrectAns =
+      country1.areaKm2 <= country2.areaKm2 ? country1 : country2;
 
     return {
       type: "comparison",
       question: "Which country has a larger area?",
+      details: `${answer.name} has a surface area of ${answer.areaKm2}km², whereas ${incorrectAns.name} has a surface area of ${incorrectAns.areaKm2}km².`,
       options: [
         {
           type: "image",
@@ -164,7 +173,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
           text: country2.name,
         },
       ],
-      answerId,
+      answerId: answer.id,
     };
   }
 }
