@@ -3,7 +3,7 @@ import FlashcardCore from "./FlashcardCore";
 import { Flashcard as FlashcardProps } from "@quizzler/shared";
 
 type Props = {
-  onClick?: () => void
+  onClick?: () => void;
 } & FlashcardProps;
 
 export default function Flashcard(props: Props) {
@@ -12,8 +12,8 @@ export default function Flashcard(props: Props) {
   if (props.type === "image") {
     content = (
       <>
-        <img src={props.image} alt="Flashcard content" />
-        {props.text && <p>{props.text}</p>}
+        <img src={props.image} alt="Flashcard content" width={320} />
+        {props.text && <h2>{props.text}</h2>}
       </>
     );
   } else {
