@@ -40,6 +40,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       question: "What country does this flag belong to?",
       flashcard: {
         type: "image",
+        id: country.id,
         image: country.flagUrl,
       },
       answer: country.name,
@@ -53,6 +54,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       question: "What country has this capital city?",
       flashcard: {
         type: "text",
+        id: country.id,
         text: country.capital,
       },
       answer: country.name,
@@ -66,6 +68,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       question: "What is the capital city of this country?",
       flashcard: {
         type: "image",
+        id: country.id,
         image: country.flagUrl,
         text: country.name,
       },

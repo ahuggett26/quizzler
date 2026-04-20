@@ -5,24 +5,35 @@ export interface User {
 
 type ImageFlashcard = {
   type: "image";
+  id: number;
   image: string;
   text?: string;
 };
 
 type TextFlashcard = {
   type: "text";
+  id: number;
   text: string;
 };
 
 export type Flashcard = ImageFlashcard | TextFlashcard;
 
-export type SingleQuestion = {
+export type SingleQuestion = Question & {
   type: "single";
-  question: string;
   flashcard: Flashcard;
   answer: string;
   answerType: CountryAnswerType;
 };
+
+export type ComparisonQuestion = Question & {
+  type: "comparison";
+  options: readonly [Flashcard, Flashcard];
+  answerId: number;
+};
+
+export type Question = {
+  question: string;
+}
 
 export interface Country {
   id: number;
@@ -37,6 +48,8 @@ export type CountryQuestionType =
   | "flag"
   | "capital"
   | "capital-country"
+  | "population-compare"
+  | "area-compare"
   | "any";
 
 export type GetCountryQuestionsParams = {
