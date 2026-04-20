@@ -43,6 +43,13 @@ export const countryRepository = {
     return rows.map(rowToCountry);
   },
 
+  getComparison(denylist: number[]): Country {
+    const rows = db
+      .prepare("SELECT * FROM countries WHERE id NOT IN (?) ORDER BY RANDOM() LIMIT 1")
+      .all(denylist) as CountryRow[];
+    return rows.map(rowToCountry)[0];
+  },
+
   getCount(): number {
     const result = db
       .prepare("SELECT COUNT(*) as count FROM countries")

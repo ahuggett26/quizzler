@@ -1,5 +1,5 @@
-import { SingleQuestion } from "@quizzler/shared";
+import { Question } from "@quizzler/shared";
 
 export default interface QuestionGenerator<T> {
-  generate(params: T): SingleQuestion[];
+  generate(params: T): Question[];
 }

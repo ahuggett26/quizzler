@@ -3,16 +3,17 @@ import {
   Country,
   GetCountryQuestionsParams,
   SingleQuestion,
+  Question,
+  ComparisonQuestion,
 } from "@quizzler/shared";
 import QuestionGenerator from "./questionGenerator";
 
 const DEFAULT_COUNT = 5;
 
 export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQuestionsParams> {
-  generate(params: GetCountryQuestionsParams): SingleQuestion[] {
-    const countries = countryRepository.getRandom(
-      params.count ?? DEFAULT_COUNT,
-    );
+  generate(params: GetCountryQuestionsParams): Question[] {
+    const count = params.count ?? DEFAULT_COUNT;
+    const countries = countryRepository.getRandom(count);
 
     switch (params.type) {
       case "flag":
@@ -21,6 +22,10 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
         return countries.map(this.generateCapitalQuestion);
       case "capital-country":
         return countries.map(this.generateCapitalCountryQuestion);
+      case "population-compare":
+        return countries.map(c => this.generatePopulationComparisonQuestion(c, countryRepository.getComparison(countries.map(c => c.id))));
+      case "area-compare":
+        return countries.map(c => this.generateAreaComparisonQuestion(c, countryRepository.getComparison(countries.map(c => c.id))));
       case "any":
       default:
         return countries.map((country) => {
@@ -75,5 +80,59 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       answer: country.capital,
       answerType: "capital",
     };
+  }
+
+  private generatePopulationComparisonQuestion(country1: Country, country2: Country): ComparisonQuestion {
+    const answerId =
+      country1.population > country2.population
+        ? country1.id
+        : country2.id;
+
+    return {
+      type: "comparison",
+      question: "Which country has a larger population?",
+      options: [
+        {
+          type: "image",
+          id: country1.id,
+          image: country1.flagUrl,
+          text: country1.name,
+        },
+        {
+          type: "image",
+          id: country2.id,
+          image: country2.flagUrl,
+          text: country2.name,
+        },
+      ],
+      answerId,
+    }
+  }
+
+  private generateAreaComparisonQuestion(country1: Country, country2: Country): ComparisonQuestion {
+    const answerId =
+      country1.areaKm2 > country2.areaKm2
+        ? country1.id
+        : country2.id;
+
+    return {
+      type: "comparison",
+      question: "Which country has a larger area?",
+      options: [
+        {
+          type: "image",
+          id: country1.id,
+          image: country1.flagUrl,
+          text: country1.name,
+        },
+        {
+          type: "image",
+          id: country2.id,
+          image: country2.flagUrl,
+          text: country2.name,
+        },
+      ],
+      answerId,
+    }
   }
 }

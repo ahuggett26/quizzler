@@ -18,22 +18,22 @@ type TextFlashcard = {
 
 export type Flashcard = ImageFlashcard | TextFlashcard;
 
-export type SingleQuestion = Question & {
+export type SingleQuestion = {
   type: "single";
+  question: string;
   flashcard: Flashcard;
   answer: string;
   answerType: CountryAnswerType;
 };
 
-export type ComparisonQuestion = Question & {
+export type ComparisonQuestion = {
   type: "comparison";
+  question: string;
   options: readonly [Flashcard, Flashcard];
   answerId: number;
 };
 
-export type Question = {
-  question: string;
-}
+export type Question = SingleQuestion | ComparisonQuestion;
 
 export interface Country {
   id: number;
