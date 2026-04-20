@@ -8,6 +8,7 @@ import ComparisonQuestion from "../components/questions/ComparisonQuestion";
 export default function Quiz() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionCount, setQuestionCount] = useState(1);
+  const [score, setScore] = useState(0);
   const currentQuestion = questions[questionCount - 1];
 
   useEffect(() => {
@@ -25,12 +26,16 @@ export default function Quiz() {
   return (
     <div className={styles.container}>
       <h1>Question {questionCount}</h1>
+      <p className={styles.score}>
+        Score: {score} / {questions.length || 0}
+      </p>
 
       {currentQuestion && currentQuestion.type === "single" && (
         <SingleQuestion
           {...currentQuestion}
           onSubmit={(answer) => {
             if (checkAnswer(answer, currentQuestion.answer, currentQuestion.answerType)) {
+              setScore((s) => s + 1);
               alert("Correct!");
             } else {
               alert("Wrong! The correct answer is: " + currentQuestion.answer);
@@ -44,6 +49,7 @@ export default function Quiz() {
           {...currentQuestion}
           onSubmit={(answer) => {
             if (answer === currentQuestion.answerId) {
+              setScore((s) => s + 1);
               alert("Correct!");
             } else {
               alert("Wrong!");

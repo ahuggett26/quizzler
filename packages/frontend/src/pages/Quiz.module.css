@@ -3,3 +3,11 @@
   flex-direction: column;
   align-items: center;
 }
+
+.score {
+  margin: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2f4f4f;
+}
