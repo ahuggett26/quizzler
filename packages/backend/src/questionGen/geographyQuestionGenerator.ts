@@ -11,9 +11,9 @@ import QuestionGenerator from "./questionGenerator";
 const DEFAULT_COUNT = 5;
 
 export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQuestionsParams> {
-  countries: Country[] = [];
+  private countries: Country[] = [];
 
-  private countryIds(): number[] {
+  private getCountryIds(): number[] {
     return this.countries.map((c) => c.id);
   }
 
@@ -23,30 +23,37 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
 
     switch (params.type) {
       case "flag":
-        return this.countries.map(this.generateFlagQuestion);
+        return this.countries.map((country) => this.generateFlagQuestion(country));
       case "capital":
-        return this.countries.map(this.generateCapitalQuestion);
+        return this.countries.map((country) =>
+          this.generateCapitalQuestion(country),
+        );
       case "capital-country":
-        return this.countries.map(this.generateCapitalCountryQuestion);
+        return this.countries.map((country) =>
+          this.generateCapitalCountryQuestion(country),
+        );
       case "population-compare":
-        return this.countries.map(this.generatePopulationComparisonQuestion);
+        return this.countries.map((country) =>
+          this.generatePopulationComparisonQuestion(country),
+        );
       case "area-compare":
-        return this.countries.map(this.generateAreaComparisonQuestion);
+        return this.countries.map((country) =>
+          this.generateAreaComparisonQuestion(country),
+        );
       case "any":
       default:
         return this.countries.map((country) => {
           const fns = [
-            this.generateFlagQuestion,
-            this.generateCapitalQuestion,
-            this.generateCapitalCountryQuestion,
-            this.generatePopulationComparisonQuestion,
-            this.generateAreaComparisonQuestion,
+            (c: Country) => this.generateFlagQuestion(c),
+            (c: Country) => this.generateCapitalQuestion(c),
+            (c: Country) => this.generateCapitalCountryQuestion(c),
+            (c: Country) => this.generatePopulationComparisonQuestion(c),
+            (c: Country) => this.generateAreaComparisonQuestion(c),
           ];
           return fns[Math.floor(Math.random() * fns.length)](country);
         });
     }
   }
-
 
   private generateFlagQuestion(country: Country): SingleQuestion {
     return {
@@ -91,19 +98,19 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     };
   }
 
-  private generatePopulationComparisonQuestion(country1: Country): ComparisonQuestion {
+  private generatePopulationComparisonQuestion(
+    country1: Country,
+  ): ComparisonQuestion {
     const country2 = countryRepository.getComparison(
       country1,
       "population",
-      this.countryIds(),
+      this.getCountryIds(),
     );
     if (!country2) {
       throw new Error("No comparison country available");
     }
     const answerId =
-      country1.population > country2.population
-        ? country1.id
-        : country2.id;
+      country1.population > country2.population ? country1.id : country2.id;
 
     return {
       type: "comparison",
@@ -123,22 +130,22 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
         },
       ],
       answerId,
-    }
+    };
   }
 
-  private generateAreaComparisonQuestion(country1: Country): ComparisonQuestion {
+  private generateAreaComparisonQuestion(
+    country1: Country,
+  ): ComparisonQuestion {
     const country2 = countryRepository.getComparison(
       country1,
       "area_km2",
-      this.countryIds(),
+      this.getCountryIds(),
     );
     if (!country2) {
       throw new Error("No comparison country available");
     }
     const answerId =
-      country1.areaKm2 > country2.areaKm2
-        ? country1.id
-        : country2.id;
+      country1.areaKm2 > country2.areaKm2 ? country1.id : country2.id;
 
     return {
       type: "comparison",
@@ -158,6 +165,6 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
         },
       ],
       answerId,
-    }
+    };
   }
 }
