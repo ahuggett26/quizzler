@@ -2,7 +2,11 @@ import { ReactNode } from "react";
 import FlashcardCore from "./FlashcardCore";
 import { Flashcard as FlashcardProps } from "@quizzler/shared";
 
-export default function Flashcard(props: FlashcardProps) {
+type Props = {
+  onClick?: () => void
+} & FlashcardProps;
+
+export default function Flashcard(props: Props) {
   let content: ReactNode;
 
   if (props.type === "image") {
@@ -16,5 +20,5 @@ export default function Flashcard(props: FlashcardProps) {
     content = <h2>{props.text}</h2>;
   }
 
-  return <FlashcardCore>{content}</FlashcardCore>;
+  return <FlashcardCore onClick={props.onClick}>{content}</FlashcardCore>;
 }

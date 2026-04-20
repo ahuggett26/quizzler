@@ -5,3 +5,11 @@
   padding: 4rem;
   background: white;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background: rgb(243, 243, 243);
+}
