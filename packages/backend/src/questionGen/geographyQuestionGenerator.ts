@@ -11,33 +11,42 @@ import QuestionGenerator from "./questionGenerator";
 const DEFAULT_COUNT = 5;
 
 export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQuestionsParams> {
+  countries: Country[] = [];
+
+  private countryIds(): number[] {
+    return this.countries.map((c) => c.id);
+  }
+
   generate(params: GetCountryQuestionsParams): Question[] {
     const count = params.count ?? DEFAULT_COUNT;
-    const countries = countryRepository.getRandom(count);
+    this.countries = countryRepository.getRandom(count);
 
     switch (params.type) {
       case "flag":
-        return countries.map(this.generateFlagQuestion);
+        return this.countries.map(this.generateFlagQuestion);
       case "capital":
-        return countries.map(this.generateCapitalQuestion);
+        return this.countries.map(this.generateCapitalQuestion);
       case "capital-country":
-        return countries.map(this.generateCapitalCountryQuestion);
+        return this.countries.map(this.generateCapitalCountryQuestion);
       case "population-compare":
-        return countries.map(c => this.generatePopulationComparisonQuestion(c, countryRepository.getComparison(countries.map(c => c.id))));
+        return this.countries.map(this.generatePopulationComparisonQuestion);
       case "area-compare":
-        return countries.map(c => this.generateAreaComparisonQuestion(c, countryRepository.getComparison(countries.map(c => c.id))));
+        return this.countries.map(this.generateAreaComparisonQuestion);
       case "any":
       default:
-        return countries.map((country) => {
+        return this.countries.map((country) => {
           const fns = [
             this.generateFlagQuestion,
             this.generateCapitalQuestion,
             this.generateCapitalCountryQuestion,
+            this.generatePopulationComparisonQuestion,
+            this.generateAreaComparisonQuestion,
           ];
           return fns[Math.floor(Math.random() * fns.length)](country);
         });
     }
   }
+
 
   private generateFlagQuestion(country: Country): SingleQuestion {
     return {
@@ -82,7 +91,15 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     };
   }
 
-  private generatePopulationComparisonQuestion(country1: Country, country2: Country): ComparisonQuestion {
+  private generatePopulationComparisonQuestion(country1: Country): ComparisonQuestion {
+    const country2 = countryRepository.getComparison(
+      country1,
+      "population",
+      this.countryIds(),
+    );
+    if (!country2) {
+      throw new Error("No comparison country available");
+    }
     const answerId =
       country1.population > country2.population
         ? country1.id
@@ -109,7 +126,15 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     }
   }
 
-  private generateAreaComparisonQuestion(country1: Country, country2: Country): ComparisonQuestion {
+  private generateAreaComparisonQuestion(country1: Country): ComparisonQuestion {
+    const country2 = countryRepository.getComparison(
+      country1,
+      "area_km2",
+      this.countryIds(),
+    );
+    if (!country2) {
+      throw new Error("No comparison country available");
+    }
     const answerId =
       country1.areaKm2 > country2.areaKm2
         ? country1.id

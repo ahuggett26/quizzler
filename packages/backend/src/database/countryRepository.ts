@@ -43,11 +43,34 @@ export const countryRepository = {
     return rows.map(rowToCountry);
   },
 
-  getComparison(denylist: number[]): Country {
-    const rows = db
-      .prepare("SELECT * FROM countries WHERE id NOT IN (?) ORDER BY RANDOM() LIMIT 1")
-      .all(denylist) as CountryRow[];
-    return rows.map(rowToCountry)[0];
+  getComparison(
+    referenceCountry: Country,
+    metricColumn: "population" | "area_km2",
+    denylist: number[],
+  ): Country | null {
+    const referenceValue =
+      metricColumn === "population"
+        ? referenceCountry.population
+        : referenceCountry.areaKm2;
+
+    const query = `
+      SELECT *
+      FROM (
+        SELECT *
+        FROM countries
+        WHERE id NOT IN (${denylist.join(",")})
+        ORDER BY ABS(${metricColumn} - ?)
+        LIMIT 50
+      )
+      ORDER BY RANDOM()
+      LIMIT 1
+    `;
+
+    const row = db
+      .prepare(query)
+      .get(referenceValue) as CountryRow | undefined;
+
+    return row ? rowToCountry(row) : null;
   },
 
   getCount(): number {
