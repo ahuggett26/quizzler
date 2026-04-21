@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import Quiz from "./pages/Quiz";
 import "./styles.css";
 import Root from "./pages/Root";
+import QuizComplete from "./pages/QuizComplete";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "/geography",
         element: <Quiz />,
+      },
+      {
+        path: "/quiz-complete",
+        element: <QuizComplete />,
       },
     ],
   },

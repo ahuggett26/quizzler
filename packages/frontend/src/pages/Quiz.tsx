@@ -1,5 +1,6 @@
 import { Question } from "@quizzler/shared";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import SingleQuestion from "../components/questions/SingleQuestion";
 import { checkAnswer } from "@quizzler/shared/src/answerChecker";
 import styles from "./Quiz.module.css";
@@ -7,6 +8,7 @@ import ComparisonQuestion from "../components/questions/ComparisonQuestion";
 import AnswerDisplay from "../components/questions/AnswerDisplay";
 
 export default function Quiz() {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [questionCount, setQuestionCount] = useState(1);
   const [score, setScore] = useState(0);
@@ -23,7 +25,12 @@ export default function Quiz() {
     setQuestionResult(null);
     if (questionCount < questions.length) {
       setQuestionCount((c) => c + 1);
+      return;
     }
+
+    navigate("/quiz-complete", {
+      state: { score, total: questions.length },
+    });
   }
 
   return (
