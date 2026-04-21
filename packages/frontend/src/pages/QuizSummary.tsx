@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
-import styles from "./QuizComplete.module.css";
+import styles from "./QuizSummary.module.css";
 import PrimaryButton from "../components/common/PrimaryButton";
 
 type QuizCompleteLocationState = {
@@ -22,9 +22,7 @@ export default function QuizComplete() {
       <p className={styles.score}>
         Your score: {score} / {total}
       </p>
-      <PrimaryButton onClick={() => navigate("/")}>
-        Back to home
-      </PrimaryButton>
+      <PrimaryButton onClick={() => navigate("/")}>Back to home</PrimaryButton>
     </div>
   );
 }

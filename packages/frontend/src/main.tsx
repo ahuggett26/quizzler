@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import Quiz from "./pages/Quiz";
 import "./styles.css";
 import Root from "./pages/Root";
-import QuizComplete from "./pages/QuizComplete";
+import QuizComplete from "./pages/QuizSummary";
 
 const router = createBrowserRouter([
   {

@@ -13,9 +13,6 @@ export default function SingleQuestion(
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   function submitAnswer() {
-    if (props.disabled) {
-      return;
-    }
     if (inputRef?.current?.value) {
       props.onSubmit(inputRef.current.value);
       inputRef.current.value = "";
@@ -35,9 +32,6 @@ export default function SingleQuestion(
         className={styles.input}
         disabled={props.disabled}
         onKeyDown={(e) => {
-          if (props.disabled) {
-            return;
-          }
           if (e.key === "Enter") {
             submitAnswer();
           }
