@@ -14,6 +14,7 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [questionResult, setQuestionResult] = useState<boolean | null>(null);
   const currentQuestion = questions[questionCount - 1];
+  const questionAnswered = questionResult !== null;
 
   useEffect(() => {
     fetch("http://localhost:4000/api/questions?type=any&count=5")
@@ -43,6 +44,7 @@ export default function Quiz() {
       {currentQuestion && currentQuestion.type === "single" && (
         <SingleQuestion
           {...currentQuestion}
+          disabled={questionAnswered}
           onSubmit={(answer) => {
             const isCorrect = checkAnswer(
               answer,
@@ -59,6 +61,7 @@ export default function Quiz() {
       {currentQuestion && currentQuestion.type === "comparison" && (
         <ComparisonQuestion
           {...currentQuestion}
+          disabled={questionAnswered}
           onSubmit={(answer) => {
             const isCorrect = answer === currentQuestion.answerId;
             if (isCorrect) {
@@ -68,7 +71,7 @@ export default function Quiz() {
           }}
         />
       )}
-      {questionResult !== null && (
+      {questionAnswered && (
         <AnswerDisplay
           isCorrect={questionResult}
           details={currentQuestion.details}

@@ -5,11 +5,17 @@ import styles from "./SingleQuestion.module.css";
 import PrimaryButton from "../common/PrimaryButton";
 
 export default function SingleQuestion(
-  props: SingleQuestionProps & { onSubmit: (answer: string) => void },
+  props: SingleQuestionProps & {
+    disabled?: boolean;
+    onSubmit: (answer: string) => void;
+  },
 ) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   function submitAnswer() {
+    if (props.disabled) {
+      return;
+    }
     if (inputRef?.current?.value) {
       props.onSubmit(inputRef.current.value);
       inputRef.current.value = "";
@@ -27,13 +33,19 @@ export default function SingleQuestion(
         placeholder="Your answer here..."
         ref={inputRef}
         className={styles.input}
+        disabled={props.disabled}
         onKeyDown={(e) => {
+          if (props.disabled) {
+            return;
+          }
           if (e.key === "Enter") {
             submitAnswer();
           }
         }}
       />
-      <PrimaryButton onClick={() => submitAnswer()}>Submit</PrimaryButton>
+      <PrimaryButton disabled={props.disabled} onClick={() => submitAnswer()}>
+        Submit
+      </PrimaryButton>
     </div>
   );
 }
