@@ -40,16 +40,26 @@ export default function QuizComplete() {
       <section className={styles.summaryList}>
         {questions.map((question, index) => {
           const answer = userAnswers[index];
+          const correctAnswer = getCorrectAnswer(question);
 
           return (
-            <p key={`question-${index}`} className={styles.summaryRow}>
-              <span className={styles.questionLabel}>Question {index + 1}</span>
-              <span>{answer?.correct ? "✅" : "❌"}</span>
-              <span>
-                <i>{answer?.answer ?? "-"}</i>
-              </span>
-              <span>{getCorrectAnswer(question)}</span>
-            </p>
+            <details key={`question-${index}`} className={styles.dropdown}>
+              <summary className={styles.dropdownHeader}>
+                <span className={styles.questionLabel}>Question {index + 1}</span>
+                <span>{answer?.correct ? "✅" : "❌"}</span>
+                <span>{correctAnswer}</span>
+                <span className={styles.chevron} aria-hidden="true">
+                  V
+                </span>
+              </summary>
+              <div className={styles.dropdownBody}>
+                <p className={styles.answerLine}>
+                  <span>Your answer: </span>
+                  <i>{answer?.answer ?? "-"}</i>
+                </p>
+                <p className={styles.detailsText}>{question.details}</p>
+              </div>
+            </details>
           );
         })}
       </section>
