@@ -2,6 +2,7 @@ import { SingleQuestion as SingleQuestionProps } from "@quizzler/shared";
 import Flashcard from "../cards/Flashcard";
 import React from "react";
 import styles from "./SingleQuestion.module.css";
+import PrimaryButton from "../common/PrimaryButton";
 
 export default function SingleQuestion(
   props: SingleQuestionProps & { onSubmit: (answer: string) => void },
@@ -32,7 +33,7 @@ export default function SingleQuestion(
           }
         }}
       />
-      <button onClick={() => submitAnswer()}>Submit</button>
+      <PrimaryButton onClick={() => submitAnswer()}>Submit</PrimaryButton>
     </div>
   );
 }

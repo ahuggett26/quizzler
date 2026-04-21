@@ -1,3 +1,4 @@
+import PrimaryButton from "../common/PrimaryButton";
 import styles from "./AnswerDisplay.module.css";
 
 type Props = {
@@ -13,9 +14,9 @@ export default function AnswerDisplay({ isCorrect, details, onNext }: Props) {
         {isCorrect ? "Correct" : "Wrong"}
       </h3>
       <p className={styles.details}>{details}</p>
-      <button type="button" onClick={onNext}>
+      <PrimaryButton type="button" onClick={onNext}>
         Next question
-      </button>
+      </PrimaryButton>
     </section>
   );
 }

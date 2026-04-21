@@ -17,18 +17,3 @@
   font-weight: 600;
   color: #2f4f4f;
 }
-
-.button {
-  font-size: 1.25rem;
-  padding: 0.9rem 1.75rem;
-  background-color: white;
-  color: var(--primary-color);
-  border: 3px solid var(--primary-color);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 4px 0 0 var(--primary-color);
-}
-
-.button:hover {
-  background-color: rgb(243, 243, 243);
-}
