@@ -4,6 +4,17 @@ import { GeographyQuestionGenerator } from "../questionGen/geographyQuestionGene
 
 const router = Router();
 
+router.get("/daily", (req: Request, res: Response) => {
+  try {
+    const generator = new GeographyQuestionGenerator();
+    const questions = generator.generateDaily();
+    res.json(questions);
+  } catch (err) {
+    console.error("Error generating daily questions:", err);
+    res.status(500).json({ error: "Failed to generate daily questions" });
+  }
+});
+
 router.get("/", (req: Request, res: Response) => {
   try {
     const type = (req.query.type as CountryQuestionType) ?? "any";

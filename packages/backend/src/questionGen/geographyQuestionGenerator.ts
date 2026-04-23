@@ -55,6 +55,34 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     }
   }
 
+  generateDaily(): Question[] {
+    const date = new Date();
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const dayOfMonth = date.getUTCDate();
+    this.countries = countryRepository.getDailyCountries(
+      DEFAULT_COUNT,
+      year,
+      month,
+      dayOfMonth,
+    );
+
+    const builders = [
+      (c: Country) => this.generateFlagQuestion(c),
+      (c: Country) => this.generateCapitalQuestion(c),
+      (c: Country) => this.generateCapitalCountryQuestion(c),
+      (c: Country) => this.generatePopulationComparisonQuestion(c),
+      (c: Country) => this.generateAreaComparisonQuestion(c),
+    ];
+
+    // Deterministic daily variation in question type sequencing.
+    const typeOffset = (year * 31 + month * 17 + dayOfMonth) % builders.length;
+    return this.countries.map((country, index) => {
+      const builder = builders[(index + typeOffset) % builders.length];
+      return builder(country);
+    });
+  }
+
   private generateFlagQuestion(country: Country): SingleQuestion {
     return {
       type: "single",
