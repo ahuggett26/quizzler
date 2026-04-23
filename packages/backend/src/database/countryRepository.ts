@@ -22,20 +22,6 @@ function rowToCountry(row: CountryRow): Country {
 }
 
 export const countryRepository = {
-  getAll(): Country[] {
-    const rows = db
-      .prepare("SELECT * FROM countries ORDER BY name")
-      .all() as CountryRow[];
-    return rows.map(rowToCountry);
-  },
-
-  getById(id: number): Country | null {
-    const row = db.prepare("SELECT * FROM countries WHERE id = ?").get(id) as
-      | CountryRow
-      | undefined;
-    return row ? rowToCountry(row) : null;
-  },
-
   getRandom(count: number): Country[] {
     const rows = db
       .prepare("SELECT * FROM countries ORDER BY RANDOM() LIMIT ?")
@@ -151,12 +137,5 @@ export const countryRepository = {
       .get(referenceValue) as CountryRow | undefined;
 
     return row ? rowToCountry(row) : null;
-  },
-
-  getCount(): number {
-    const result = db
-      .prepare("SELECT COUNT(*) as count FROM countries")
-      .get() as { count: number };
-    return result.count;
   },
 };
