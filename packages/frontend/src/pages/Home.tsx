@@ -8,8 +8,11 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <PrimaryButton onClick={() => navigate("/geography")}>
-        Quick Geography Quiz
+      <PrimaryButton onClick={() => navigate("/geography-daily")}>
+        Daily Geography Quiz
+      </PrimaryButton>
+      <PrimaryButton onClick={() => navigate("/geography-practice")}>
+        Geography Practice Quiz
       </PrimaryButton>
     </div>
   );

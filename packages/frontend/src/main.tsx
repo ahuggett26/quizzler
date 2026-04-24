@@ -2,10 +2,11 @@ import React from "react";
 import Home from "./pages/Home";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import ReactDOM from "react-dom/client";
-import Quiz from "./pages/Quiz";
 import "./styles.css";
 import Root from "./pages/Root";
-import QuizComplete from "./pages/QuizSummary";
+import QuizSummary from "./components/quiz/QuizSummary";
+import PracticeQuiz from "./components/quiz/PracticeQuiz";
+import DailyQuiz from "./components/quiz/DailyQuiz";
 
 const router = createBrowserRouter([
   {
@@ -17,12 +18,16 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/geography",
-        element: <Quiz />,
+        path: "/geography-daily",
+        element: <DailyQuiz />,
+      },
+      {
+        path: "/geography-practice",
+        element: <PracticeQuiz />,
       },
       {
         path: "/quiz-complete",
-        element: <QuizComplete />,
+        element: <QuizSummary />,
       },
     ],
   },

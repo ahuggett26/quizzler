@@ -3,22 +3,22 @@ import { comparisonOptionText } from "@quizzler/shared/src/util";
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import styles from "./QuizSummary.module.css";
-import PrimaryButton from "../components/common/PrimaryButton";
+import PrimaryButton from "../common/PrimaryButton";
 
 export type UserAnswer = {
   answer: string;
   correct: boolean;
 };
 
-type QuizCompleteLocationState = {
+type QuizSummaryLocationState = {
   questions: Question[];
   userAnswers: UserAnswer[];
 };
 
-export default function QuizComplete() {
+export default function QuizSummary() {
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state as QuizCompleteLocationState | null | undefined;
+  const state = location.state as QuizSummaryLocationState | null | undefined;
 
   const questions = state?.questions ?? [];
   const userAnswers = state?.userAnswers ?? [];
@@ -45,7 +45,9 @@ export default function QuizComplete() {
           return (
             <details key={`question-${index}`} className={styles.dropdown}>
               <summary className={styles.dropdownHeader}>
-                <span className={styles.questionLabel}>Question {index + 1}</span>
+                <span className={styles.questionLabel}>
+                  Question {index + 1}
+                </span>
                 <span>{answer?.correct ? "✅" : "❌"}</span>
                 <span>{correctAnswer}</span>
                 <span className={styles.chevron} aria-hidden="true">
