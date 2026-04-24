@@ -40,7 +40,7 @@ export const countryRepository = {
     utcYear: number,
     utcMonth: number,
     utcDayOfMonth: number,
-  ): Country[] {    
+  ): Country[] {
     if (count < 1) {
       return [];
     }
@@ -96,15 +96,17 @@ export const countryRepository = {
       ORDER BY r.rn
     `;
 
-    const rows = db.prepare(query).all(
-      DAILY_RING_MIX_A,
-      monthSeed,
-      DAILY_RING_MIX_B,
-      DAILY_RING_MOD,
-      utcDayOfMonth,
-      DAILY_RING_STEP,
-      count,
-    ) as CountryRow[];
+    const rows = db
+      .prepare(query)
+      .all(
+        DAILY_RING_MIX_A,
+        monthSeed,
+        DAILY_RING_MIX_B,
+        DAILY_RING_MOD,
+        utcDayOfMonth,
+        DAILY_RING_STEP,
+        count,
+      ) as CountryRow[];
 
     return rows.map(rowToCountry);
   },
@@ -113,6 +115,7 @@ export const countryRepository = {
     referenceCountry: Country,
     metricColumn: "population" | "area_km2",
     denylist: number[],
+    date?: Date,
   ): Country | null {
     const referenceValue =
       metricColumn === "population"
@@ -128,14 +131,16 @@ export const countryRepository = {
         ORDER BY ABS(${metricColumn} - ?)
         LIMIT 50
       )
-      ORDER BY RANDOM()
-      LIMIT 1
     `;
 
-    const row = db
-      .prepare(query)
-      .get(referenceValue) as CountryRow | undefined;
+    const rows = db.prepare(query).all(referenceValue) as CountryRow[];
 
-    return row ? rowToCountry(row) : null;
+    if (date === undefined) {
+      return rowToCountry(rows[Math.floor(Math.random() * rows.length)]);
+    }
+
+    const daysSinceEpoch = Math.floor(date.getTime() / (1000 * 60 * 60 * 24));
+    const index = daysSinceEpoch % rows.length;
+    return rowToCountry(rows[index]);
   },
 };

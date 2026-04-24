@@ -71,8 +71,8 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       (c: Country) => this.generateFlagQuestion(c),
       (c: Country) => this.generateCapitalQuestion(c),
       (c: Country) => this.generateCapitalCountryQuestion(c),
-      (c: Country) => this.generatePopulationComparisonQuestion(c),
-      (c: Country) => this.generateAreaComparisonQuestion(c),
+      (c: Country) => this.generatePopulationComparisonQuestion(c, date),
+      (c: Country) => this.generateAreaComparisonQuestion(c, date),
     ];
 
     // Deterministic daily variation in question type sequencing.
@@ -131,11 +131,13 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
 
   private generatePopulationComparisonQuestion(
     country1: Country,
+    date?: Date,
   ): ComparisonQuestion {
     const country2 = countryRepository.getComparison(
       country1,
       "population",
       this.getCountryIds(),
+      date
     );
     if (!country2) {
       throw new Error("No comparison country available");
@@ -169,11 +171,13 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
 
   private generateAreaComparisonQuestion(
     country1: Country,
+    date?: Date,
   ): ComparisonQuestion {
     const country2 = countryRepository.getComparison(
       country1,
       "area_km2",
       this.getCountryIds(),
+      date
     );
     if (!country2) {
       throw new Error("No comparison country available");
