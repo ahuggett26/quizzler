@@ -5,18 +5,29 @@ import { useNavigate } from "react-router";
 import styles from "./QuizSummary.module.css";
 import PrimaryButton from "../common/PrimaryButton";
 import { UserAnswer } from "../../types/UserAnswer";
+import { DailyQuizResult } from "../../storage/quizStorage";
 
-interface QuizSummaryLocationProps {
+interface DailyQuizSummaryProps {
+  type: "daily";
+  questions: Question[];
+  dailyQuizResult: DailyQuizResult;
+}
+
+interface QuizSummaryProps {
+  type: "practice";
   questions: Question[];
   userAnswers: UserAnswer[];
 }
 
-export default function QuizSummary({
-  questions,
-  userAnswers,
-}: QuizSummaryLocationProps) {
+export default function QuizSummary(
+  props: QuizSummaryProps | DailyQuizSummaryProps,
+) {
   const navigate = useNavigate();
 
+  const userAnswers =
+    props.type === "practice"
+      ? props.userAnswers
+      : props.dailyQuizResult.answers;
   const score = userAnswers.filter((answer) => answer.correct).length;
 
   function getCorrectAnswer(question: Question) {
@@ -26,14 +37,25 @@ export default function QuizSummary({
     return comparisonOptionText(question.answerId, question);
   }
 
+  let title = "Quiz complete";
+  if (props.type === "daily") {
+    const date = new Date(props.dailyQuizResult.date);
+    title = date.toLocaleDateString("en-GB", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Quiz complete</h1>
+      <h1 className={styles.title}>{title}</h1>
       <p className={styles.score}>
-        Your score: {score} / {questions.length}
+        Your score: {score} / {props.questions.length}
       </p>
       <section className={styles.summaryList}>
-        {questions.map((question, index) => {
+        {props.questions.map((question, index) => {
           const answer = userAnswers[index];
           const correctAnswer = getCorrectAnswer(question);
 

@@ -34,6 +34,10 @@ export default function DailyQuiz() {
     );
   }
   return (
-    <QuizSummary questions={questions} userAnswers={existingResult.answers} />
+    <QuizSummary
+      type="daily"
+      questions={questions}
+      dailyQuizResult={existingResult}
+    />
   );
 }

@@ -22,5 +22,11 @@ export default function PracticeQuiz() {
       />
     );
   }
-  return <QuizSummary questions={questions} userAnswers={userAnswers} />;
+  return (
+    <QuizSummary
+      type="practice"
+      questions={questions}
+      userAnswers={userAnswers}
+    />
+  );
 }
