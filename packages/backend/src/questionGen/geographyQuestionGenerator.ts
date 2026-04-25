@@ -6,6 +6,7 @@ import {
   Question,
   ComparisonQuestion,
 } from "@quizzler/shared";
+import { numberFormat } from "@quizzler/shared/src/util";
 import QuestionGenerator from "./questionGenerator";
 
 const DEFAULT_COUNT = 5;
@@ -23,7 +24,9 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
 
     switch (params.type) {
       case "flag":
-        return this.countries.map((country) => this.generateFlagQuestion(country));
+        return this.countries.map((country) =>
+          this.generateFlagQuestion(country),
+        );
       case "capital":
         return this.countries.map((country) =>
           this.generateCapitalQuestion(country),
@@ -137,7 +140,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       country1,
       "population",
       this.getCountryIds(),
-      date
+      date,
     );
     if (!country2) {
       throw new Error("No comparison country available");
@@ -150,7 +153,7 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
     return {
       type: "comparison",
       question: "Which country has a larger population?",
-      details: `${answer.name} has a population of ${answer.population}, whereas ${incorrectAns.name} has a population of ${incorrectAns.population}.`,
+      details: `${answer.name} has a population of ${numberFormat(answer.population)}, whereas ${incorrectAns.name} has a population of ${numberFormat(incorrectAns.population)}.`,
       options: [
         {
           type: "image",
@@ -177,20 +180,19 @@ export class GeographyQuestionGenerator implements QuestionGenerator<GetCountryQ
       country1,
       "area_km2",
       this.getCountryIds(),
-      date
+      date,
     );
     if (!country2) {
       throw new Error("No comparison country available");
     }
-    const answer =
-      country1.areaKm2 > country2.areaKm2 ? country1 : country2;
+    const answer = country1.areaKm2 > country2.areaKm2 ? country1 : country2;
     const incorrectAns =
       country1.areaKm2 <= country2.areaKm2 ? country1 : country2;
 
     return {
       type: "comparison",
       question: "Which country has a larger area?",
-      details: `${answer.name} has a surface area of ${answer.areaKm2}km², whereas ${incorrectAns.name} has a surface area of ${incorrectAns.areaKm2}km².`,
+      details: `${answer.name} has a surface area of ${numberFormat(answer.areaKm2)} km², whereas ${incorrectAns.name} has a surface area of ${numberFormat(incorrectAns.areaKm2)} km².`,
       options: [
         {
           type: "image",
