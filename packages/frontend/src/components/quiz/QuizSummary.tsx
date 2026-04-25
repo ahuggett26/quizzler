@@ -1,27 +1,22 @@
 import { Question } from "@quizzler/shared";
 import { comparisonOptionText } from "@quizzler/shared/src/util";
 import React from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import styles from "./QuizSummary.module.css";
 import PrimaryButton from "../common/PrimaryButton";
+import { UserAnswer } from "../../types/UserAnswer";
 
-export type UserAnswer = {
-  answer: string;
-  correct: boolean;
-};
-
-type QuizSummaryLocationState = {
+interface QuizSummaryLocationProps {
   questions: Question[];
   userAnswers: UserAnswer[];
-};
+}
 
-export default function QuizSummary() {
+export default function QuizSummary({
+  questions,
+  userAnswers,
+}: QuizSummaryLocationProps) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const state = location.state as QuizSummaryLocationState | null | undefined;
 
-  const questions = state?.questions ?? [];
-  const userAnswers = state?.userAnswers ?? [];
   const score = userAnswers.filter((answer) => answer.correct).length;
 
   function getCorrectAnswer(question: Question) {

@@ -1,26 +1,39 @@
 import { Question } from "@quizzler/shared";
 import { useEffect, useState } from "react";
 import Quiz from "./Quiz";
-import { useNavigate } from "react-router";
+import {
+  DailyQuizResult,
+  getQuizResult,
+  saveQuizResult,
+} from "../../storage/quizStorage";
+import QuizSummary from "./QuizSummary";
 
 export default function DailyQuiz() {
-  const navigate = useNavigate();
+  const fetchDate = new Date();
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [existingResult, setExistingResult] = useState<DailyQuizResult | null>(
+    null,
+  );
 
   useEffect(() => {
+    setExistingResult(getQuizResult(fetchDate));
     fetch("http://localhost:4000/api/questions/daily")
       .then((res) => res.json())
       .then((data) => setQuestions(data as Question[]));
   }, []);
 
+  if (existingResult === null) {
+    return (
+      <Quiz
+        questions={questions}
+        onComplete={(userAnswers) => {
+          const results = saveQuizResult(fetchDate, userAnswers);
+          setExistingResult(results);
+        }}
+      />
+    );
+  }
   return (
-    <Quiz
-      questions={questions}
-      onComplete={(userAnswers) =>
-        navigate("/quiz-complete", {
-          state: { questions, userAnswers },
-        })
-      }
-    />
+    <QuizSummary questions={questions} userAnswers={existingResult.answers} />
   );
 }

@@ -25,10 +25,6 @@ const router = createBrowserRouter([
         path: "/geography-practice",
         element: <PracticeQuiz />,
       },
-      {
-        path: "/quiz-complete",
-        element: <QuizSummary />,
-      },
     ],
   },
 ]);

@@ -6,7 +6,7 @@ import { checkAnswer } from "@quizzler/shared/src/answerChecker";
 import styles from "./Quiz.module.css";
 import ComparisonQuestion from "../../components/questions/ComparisonQuestion";
 import AnswerDisplay from "../../components/questions/AnswerDisplay";
-import { UserAnswer } from "./QuizSummary";
+import { UserAnswer } from "../../types/UserAnswer";
 
 interface QuizProps {
   questions: Question[];

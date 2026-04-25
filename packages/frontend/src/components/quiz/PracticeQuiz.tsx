@@ -1,11 +1,12 @@
 import { Question } from "@quizzler/shared";
 import { useEffect, useState } from "react";
 import Quiz from "./Quiz";
-import { useNavigate } from "react-router";
+import { UserAnswer } from "../../types/UserAnswer";
+import QuizSummary from "./QuizSummary";
 
 export default function PracticeQuiz() {
-  const navigate = useNavigate();
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:4000/api/questions?type=any&count=5")
@@ -13,14 +14,13 @@ export default function PracticeQuiz() {
       .then((data) => setQuestions(data as Question[]));
   }, []);
 
-  return (
-    <Quiz
-      questions={questions}
-      onComplete={(userAnswers) =>
-        navigate("/quiz-complete", {
-          state: { questions, userAnswers },
-        })
-      }
-    />
-  );
+  if (userAnswers === null) {
+    return (
+      <Quiz
+        questions={questions}
+        onComplete={(userAnswers) => setUserAnswers(userAnswers)}
+      />
+    );
+  }
+  return <QuizSummary questions={questions} userAnswers={userAnswers} />;
 }
