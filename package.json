@@ -9,6 +9,7 @@
   "scripts": {
     "build": "npm run build --workspace=packages/shared && npm run build --workspaces",
     "dev": "concurrently \"npm run dev --workspace=packages/backend\" \"npm run dev --workspace=packages/frontend\"",
+    "seed-db": "npm run seed --workspace=packages/backend",
     "start-backend": "npm run start --workspace=packages/backend",
     "start-frontend": "npm run start --workspace=packages/frontend"
   },
