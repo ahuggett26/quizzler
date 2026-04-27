@@ -6,8 +6,8 @@ import {
   Question,
   ComparisonQuestion,
 } from "@quizzler/shared";
-import { numberFormat } from "@quizzler/shared/src/util";
 import QuestionGenerator from "./questionGenerator";
+import { numberFormat } from "../util/numberFormat";
 
 const DEFAULT_COUNT = 5;
 
