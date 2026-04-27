@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "build": "npm run build --workspace=packages/shared && npm run build --workspaces",
-    "dev": "concurrently \"npm run dev --workspace=packages/backend\" \"npm run dev --workspace=packages/frontend\""
+    "dev": "concurrently \"npm run dev --workspace=packages/backend\" \"npm run dev --workspace=packages/frontend\"",
+    "start-backend": "npm run start --workspace=packages/backend",
+    "start-frontend": "npm run start --workspace=packages/frontend"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
