@@ -9,7 +9,11 @@ const port = process.env.PORT ?? 4000;
 
 // ─── Middleware ───────────────────────────────────────────────────────────────────────────
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://ajh-quizzler.netlify.app/"],
+  }),
+);
 app.use(express.json());
 
 // ─── Routes ───────────────────────────────────────────────────────────────────────────────

@@ -7,6 +7,7 @@ import {
   saveQuizResult,
 } from "../../storage/quizStorage";
 import QuizSummary from "./QuizSummary";
+import { BACKEND_URL_BASE } from "../api/helpers";
 
 export default function DailyQuiz() {
   const fetchDate = new Date();
@@ -17,7 +18,7 @@ export default function DailyQuiz() {
 
   useEffect(() => {
     setExistingResult(getQuizResult(fetchDate));
-    fetch("http://localhost:4000/api/questions/daily")
+    fetch(`${BACKEND_URL_BASE()}/api/questions/daily`)
       .then((res) => res.json())
       .then((data) => setQuestions(data as Question[]));
   }, []);
