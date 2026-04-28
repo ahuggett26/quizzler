@@ -9,9 +9,27 @@ const port = process.env.PORT ?? 4000;
 
 // ─── Middleware ───────────────────────────────────────────────────────────────────────────
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ajh-quizzler.netlify.app",
+  "https://ajh-quizzler.netlify.app/geography-practice",
+];
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://ajh-quizzler.netlify.app/"],
+    origin: (
+      requestOrigin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
+        callback(null, true);
+      } else {
+        callback(
+          new Error(`CORS blocked: origin ${requestOrigin} is not allowed`),
+        );
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
